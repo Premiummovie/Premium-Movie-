@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Hub| প্রিমিয়াম মুভি</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e50914;
+            --secondary: #b81d24;
+            --dark: #141414;
+            --light: #f5f5f1;
+            --gray: #808080;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Notification Bar */
+        .notification-bar {
+            background-color: #f5c518;
+            color: #000;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .notification-bar a {
+            color: #e50914;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .notification-close {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Adsterra Ad Containers */
+        .ad-container {
+            width: 100%;
+            margin: 20px 0;
+            text-align: center;
+            background: rgba(20,20,20,0.7);
+            padding: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .ad-label {
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        /* নেভিগেশন বার */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* হিরো সেকশন */
+        .hero {
+            position: relative;
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                        url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.png') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            padding: 0 40px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 35px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        /* মুভি সেকশন */
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .movie-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .movie-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 20px;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            color: #f5c518;
+        }
+
+        /* ফুটার */
+        footer {
+            background-color: #000;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: var(--gray);
+        }
+
+        /* রেস্পন্সিভ ডিজাইন */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+            
+            .ad-container {
+                padding: 5px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero {
+                height: auto;
+                padding: 100px 0;
+                text-align: center;
+            }
+            
+            .hero-content {
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .movie-poster {
+                height: 250px;
+            }
+            
+            .notification-bar {
+                font-size: 0.9rem;
+                padding: 8px 25px 8px 8px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-description {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .ad-container {
+                margin: 10px 0;
+            }
+            
+            .notification-bar {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Bar -->
+    <div class="notification-bar" id="notificationBar">
+        Sign-up/Installe app for premium content in <span id="countdown">5</span> seconds... <a href="https://www.profitableratecpm.com/p7as8xm5u?key=452c837ab065fa98fb69a2bd80059c20" id="redirectLink">Click here to go now</a>
+        <span class="notification-close" id="closeNotification">&times;</span>
+    </div>
+
+    <!-- Header Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <!-- Header banner -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '59ecbdc58d543da449404bda675ea564',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/59ecbdc58d543da449404bda675ea564/invoke.js"></script>
+    </div>
+
+    <div class="container">
+        <!-- নেভিগেশন বার -->
+        <nav class="navbar">
+            <a href="#" class="logo">মুভি হাব</a>
+            <div class="nav-links">
+                <a href="#">হোম</a>
+                <a href="#">মুভি</a>
+                <a href="#">টিভি শো</a>
+                <a href="#">নতুন আপলোড</a>
+            </div>
+        </nav>
+
+        <!-- হিরো সেকশন -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">প্রিমিয়াম কোয়ালিটিতে মুভি উপভোগ করুন</h1>
+                <p class="hero-description">১০,০০০+ HD মুভি এবং টিভি শো এর বিশাল কালেকশন। যেকোনো ডিভাইসে, যেকোনো সময়।</p>
+                <a href="https://linkviral89.blogspot.com" class="cta-button">Sign Up Free</a>
+            </div>
+        </section>
+
+        <!-- Middle Ad -->
+        <div class="ad-container">
+            <div class="ad-label">Sponsored</div>
+            <!-- Middle banner -->
+            <script async="async" data-cfasync="false" src="//pl26601908.profitableratecpm.com/2ab492ae793f7462f051d74f3ad0fafb/invoke.js"></script>
+            <div id="container-2ab492ae793f7462f051d74f3ad0fafb"></div>
+        </div>
+
+        <!-- Movie Section -->
+        <section>
+            <h2 class="section-title">Famous Movie</h2>
+            <div class="movies-grid">
+                <!-- মুভি কার্ড ১ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/nV7BQqHJ/Screenshot-20250502-210343-1.jpg" alt="Jawan" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.5</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- মুভি কার্ড ২ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/K8cMVVtG/Screenshot-20250502-210646-1.jpg" alt="Pathaan" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending🔥</h3>
+                        <div class="movie-meta">
+                            <span>2023</span>
+                            <span class="rating"><i class="fas fa-star"></i> 6.8</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- মুভি কার্ড ৩ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/m2BzzqXY/Screenshot-20250502-205232-1.jpg" alt="KGF Chapter 2" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending🔥</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.2</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- মুভি কার্ড ৪ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/ncFrcmrT/Screenshot-20250502-210709-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Middle Ad -->
+                <div class="ad-container" style="grid-column: 1 / -1;">
+                    <div class="ad-label">Advertisement</div>
+                    <!-- Middle banner -->
+                    <script async="async" data-cfasync="false" src="//pl26601908.profitableratecpm.com/2ab492ae793f7462f051d74f3ad0fafb/invoke.js"></script>
+                    <div id="container-2ab492ae793f7462f051d74f3ad0fafb"></div>
+                </div>
+
+                <!-- মুভি কার্ড ৫ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/fb9TgjqW/Screenshot-20250502-205418-1.jpg" alt="Vikram" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 8.0</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- মুভি কার্ড ৬ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/sxVjxFj1/Screenshot-20250502-210422-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- মুভি কার্ড ৭ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/MTYwhs7w/Screenshot-20250502-210605-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- মুভি কার্ড ৮ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/FKSkJJSq/Screenshot-20250502-220610-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- মুভি কার্ড ৯ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/hvDXwyYW/Screenshot-20250502-220443-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- মুভি কার্ড ১০ -->
+                <a href="https://linkviral89.blogspot.com" class="movie-card">
+                    <img src="https://i.postimg.cc/1XDZGsBy/Screenshot-20250502-220301-1.jpg" alt="RRR" class="movie-poster">
+                    <div class="movie-info">
+                        <h3 class="movie-title">Trending</h3>
+                        <div class="movie-meta">
+                            <span>2022</span>
+                            <span class="rating"><i class="fas fa-star"></i> 7.8</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer Ad -->
+    <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <!-- Footers banner -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'e662eed619b1d026f6e77af5174b3b90',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/e662eed619b1d026f6e77af5174b3b90/invoke.js"></script>
+    </div>
+
+    <!-- ফুটার -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>সিনেমা হাব</h3>
+                    <p>প্রিমিয়াম কোয়ালিটির মুভি এবং টিভি শো এর জন্য আপনার বিশ্বস্ত গন্তব্য।</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <!-- Social Ad -->
+                    <script type='text/javascript' src='//pl26580036.profitableratecpm.com/f2/79/81/f279814704da88ab11691838e329d85f.js'></script>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Link</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">হোম</a></li>
+                        <li><a href="#">মুভি</a></li>
+                        <li><a href="#">টিভি শো</a></li>
+                        <li><a href="#">নতুন আপলোড</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>সাহায্য</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">সচরাচর জিজ্ঞাসা</a></li>
+                        <li><a href="#">সাপোর্ট</a></li>
+                        <li><a href="#">শর্তাবলী</a></li>
+                        <li><a href="#">গোপনীয়তা নীতি</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2025 Movie Hub All Right Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Exit Intent Popunder (Loads last) -->
+    <script type="text/javascript">
+        window.onload = function() {
+            setTimeout(function() {
+                var script = document.createElement('script');
+                script.src = 'https://www.profitabledisplaynetwork.com/6c01f6fff8c8c3a2b0c4e8710a1d5e7c/invoke.js';
+                document.body.appendChild(script);
+            }, 3000);
+        };
+    </script>
+
+    <script>
+        // নতুন ট্যাবে লিংক ওপেন করার জন্য JavaScript
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open(this.getAttribute('href'), '_blank');
+            });
+        });
+        
+        // 5-second redirect notification
+        const notificationBar = document.getElementById('notificationBar');
+        const countdownElement = document.getElementById('countdown');
+        const closeNotification = document.getElementById('closeNotification');
+        const redirectLink = document.getElementById('redirectLink');
+        
+        let seconds = 5;
+        
+        const countdown = setInterval(() => {
+            seconds--;
+            countdownElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(countdown);
+                window.location.href = redirectLink.href;
+            }
+        }, 1000);
+        
+        closeNotification.addEventListener('click', () => {
+            notificationBar.style.display = 'none';
+            clearInterval(countdown);
+        });
+        
+        // Optional: Store in localStorage if user closed the notification
+        if (localStorage.getItem('notificationClosed')) {
+            notificationBar.style.display = 'none';
+            clearInterval(countdown);
+        }
+        
+        closeNotification.addEventListener('click', () => {
+            notificationBar.style.display = 'none';
+            clearInterval(countdown);
+            localStorage.setItem('notificationClosed', 'true');
+        });
+    </script>
+</body>
+</html>
