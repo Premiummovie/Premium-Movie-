@@ -7,11 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #e50914;
-            --secondary: #b81d24;
-            --dark: #141414;
-            --light: #f5f5f1;
-            --gray: #808080;
+            --primary: #2ecc71; /* Green primary color */
+            --secondary: #27ae60; /* Darker green */
+            --background: #ffffff; /* White background */
+            --text: #2c3e50; /* Dark text */
+            --light-gray: #ecf0f1; /* Light gray */
+            --gray: #95a5a6; /* Medium gray */
+            --card-bg: #ffffff; /* White cards */
+            --highlight: #e74c3c; /* Red for highlights */
         }
 
         * {
@@ -22,8 +25,8 @@
         }
 
         body {
-            background-color: var(--black);
-            color: var(--light);
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
         }
 
@@ -35,8 +38,8 @@
 
         /* Notification Bar */
         .notification-bar {
-            background-color: #f5c518;
-            color: #000;
+            background-color: #f39c12; /* Orange notification */
+            color: #fff;
             text-align: center;
             padding: 10px;
             font-weight: bold;
@@ -44,7 +47,7 @@
         }
         
         .notification-bar a {
-            color: #e50914;
+            color: #fff;
             text-decoration: underline;
             font-weight: bold;
         }
@@ -56,6 +59,7 @@
             transform: translateY(-50%);
             cursor: pointer;
             font-weight: bold;
+            color: #fff;
         }
 
         /* Adsterra Ad Containers */
@@ -63,10 +67,11 @@
             width: 100%;
             margin: 20px 0;
             text-align: center;
-            background: rgba(20,20,20,0.7);
+            background: var(--light-gray);
             padding: 10px;
             border-radius: 8px;
             overflow: hidden;
+            border: 1px solid #ddd;
         }
         
         .ad-label {
@@ -84,6 +89,7 @@
             padding: 20px 0;
             position: relative;
             z-index: 10;
+            border-bottom: 1px solid var(--light-gray);
         }
 
         .logo {
@@ -99,10 +105,11 @@
         }
 
         .nav-links a {
-            color: var(--light);
+            color: var(--text);
             text-decoration: none;
             font-size: 1.1rem;
             transition: color 0.3s;
+            font-weight: 500;
         }
 
         .nav-links a:hover {
@@ -113,13 +120,14 @@
         .hero {
             position: relative;
             height: 80vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+            background: linear-gradient(rgba(46, 204, 113, 0.8), rgba(39, 174, 96, 0.9)), 
                         url('https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.png') no-repeat center center/cover;
             display: flex;
             align-items: center;
             margin-bottom: 50px;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .hero-content {
@@ -131,6 +139,8 @@
             font-size: 3.5rem;
             margin-bottom: 20px;
             line-height: 1.2;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
         }
 
         .hero-description {
@@ -141,19 +151,22 @@
 
         .cta-button {
             display: inline-block;
-            background-color: var(--primary);
-            color: white;
+            background-color: white;
+            color: var(--primary);
             padding: 12px 35px;
-            border-radius: 4px;
+            border-radius: 30px;
             text-decoration: none;
             font-size: 1.2rem;
             font-weight: bold;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .cta-button:hover {
-            background-color: var(--secondary);
-            transform: scale(1.05);
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
 
         /* মুভি সেকশন */
@@ -162,6 +175,7 @@
             margin-bottom: 30px;
             position: relative;
             display: inline-block;
+            color: var(--text);
         }
 
         .section-title::after {
@@ -185,13 +199,16 @@
             position: relative;
             border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             cursor: pointer;
+            background: var(--card-bg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
         }
 
         .movie-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
         .movie-poster {
@@ -206,7 +223,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
             padding: 20px;
         }
 
@@ -214,24 +231,26 @@
             font-size: 1.1rem;
             margin-bottom: 5px;
             font-weight: bold;
+            color: white;
         }
 
         .movie-meta {
             display: flex;
             justify-content: space-between;
-            color: var(--gray);
+            color: rgba(255,255,255,0.8);
             font-size: 0.9rem;
         }
 
         .rating {
-            color: #f5c518;
+            color: #f1c40f;
         }
 
         /* ফুটার */
         footer {
-            background-color: #000;
+            background-color: var(--primary);
             padding: 40px 0;
             margin-top: 50px;
+            color: white;
         }
 
         .footer-content {
@@ -247,7 +266,7 @@
         }
 
         .footer-column h3 {
-            color: var(--gray);
+            color: white;
             margin-bottom: 20px;
             font-size: 1.2rem;
         }
@@ -261,13 +280,13 @@
         }
 
         .footer-links a {
-            color: var(--light);
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: color 0.3s;
         }
 
         .footer-links a:hover {
-            color: var(--primary);
+            color: white;
         }
 
         .social-links {
@@ -277,21 +296,21 @@
         }
 
         .social-links a {
-            color: var(--light);
+            color: white;
             font-size: 1.5rem;
             transition: color 0.3s;
         }
 
         .social-links a:hover {
-            color: var(--primary);
+            color: var(--light-gray);
         }
 
         .copyright {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #333;
-            color: var(--gray);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.7);
         }
 
         /* রেস্পন্সিভ ডিজাইন */
@@ -375,7 +394,7 @@
 <body>
     <!-- Notification Bar -->
     <div class="notification-bar" id="notificationBar">
-        Sign-up/Installe app for premium content in <span id="countdown">5</span> seconds... <a href="https://www.profitableratecpm.com/p7as8xm5u?key=452c837ab065fa98fb69a2bd80059c20" id="redirectLink">Click here to go now</a>
+        Sign-up/Installe app for premium content in <span id="countdown">10</span> seconds... <a href="https://www.profitableratecpm.com/p7as8xm5u?key=452c837ab065fa98fb69a2bd80059c20" id="redirectLink">Click here to go now</a>
         <span class="notification-close" id="closeNotification">&times;</span>
     </div>
 
@@ -639,13 +658,13 @@
             });
         });
         
-        // 5-second redirect notification
+        // 10-second redirect notification
         const notificationBar = document.getElementById('notificationBar');
         const countdownElement = document.getElementById('countdown');
         const closeNotification = document.getElementById('closeNotification');
         const redirectLink = document.getElementById('redirectLink');
         
-        let seconds = 5;
+        let seconds = 10;
         
         const countdown = setInterval(() => {
             seconds--;
